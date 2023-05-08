@@ -15,7 +15,7 @@ function clean(str: string) {
 }
 
 const HOST_SETTINGS = {
-  expectedOrigin: process.env.VERCEL_URL ?? 'http://localhost:3000',
+  expectedOrigin: process.env.APP_URL ?? 'http://localhost:3000',
   expectedRPID: process.env.RP_ID ?? 'localhost'
 }
 
