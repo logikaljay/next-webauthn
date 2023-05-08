@@ -23,6 +23,8 @@ export function EnrolledPasskeys(props: EnrolledPasskeyProps) {
 
   const credentials = props.credentials
 
+  console.log(`enroll-passkey props`, props)
+
   async function handleEnrollPasskey() {
 
     let challenge = await props.getChallenge()
