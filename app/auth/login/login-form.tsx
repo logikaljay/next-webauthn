@@ -51,7 +51,7 @@ export function LoginForm(props: any) {
     <form name="loginForm" action={handleGetUserSettings} className="space-y-4">
       <input type="hidden" name="returnTo" value="/admin" />
 
-      <Input name="email" type="email" placeholder="Email address" className="p-4 text-base h-auto" />
+      <Input autoComplete="email webauthn" name="email" type="email" placeholder="Email address" className="p-4 text-base h-auto" />
 
       {error && (
         <Alert variant="destructive">

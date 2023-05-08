@@ -30,7 +30,8 @@
     "next": "^13.4.1",
     "pg": "^8.10.0",
     "tailwind-merge": "^1.12.0",
-    "tailwindcss-animate": "^1.0.5"
+    "tailwindcss-animate": "^1.0.5",
+    "zact": "^0.0.2"
   },
   "devDependencies": {
     "@swc-node/register": "^1.6.5",
