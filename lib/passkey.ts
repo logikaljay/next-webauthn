@@ -1,14 +1,12 @@
+"use server"
+
 import { db } from "@/db";
 import type { PublicKeyCredentialWithAssertionJSON, PublicKeyCredentialWithAttestationJSON } from "@github/webauthn-json"
-import type {
-  VerifiedAuthenticationResponse,
-  VerifiedRegistrationResponse
-} from "@simplewebauthn/server"
-import { 
-  verifyAuthenticationResponse, 
-  verifyRegistrationResponse 
-} from "@simplewebauthn/server";
-import { users } from "@/db/managers/users";
+import type { VerifiedAuthenticationResponse, VerifiedRegistrationResponse } from "@simplewebauthn/server"
+import { verifyAuthenticationResponse, verifyRegistrationResponse } from "@simplewebauthn/server"
+import { users } from "@/db/managers/users"
+import { storage } from "./session"
+import { randomBytes } from "node:crypto"
 
 function clean(str: string) {
   return str.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
@@ -23,14 +21,24 @@ function binaryToBase64URL(bytes: Uint8Array) {
   return Buffer.from(bytes).toString('base64url')
 }
 
+declare global {
+  interface Session {
+    challenge: string
+  }
+}
 
-type UserLike = {
-  id: number
-  email: string
+export async function getChallenge() {
+  let challenge = await storage.get('challenge') as string
+  if (!challenge) {
+    let challenge = clean(randomBytes(32).toString("base64"));
+    await storage.set('challenge', challenge)
+  }
+
+  return challenge
 }
 
 export async function registerPasskey(
-  user: UserLike, 
+  user: SessionUser, 
   credential: PublicKeyCredentialWithAttestationJSON, 
   challenge: string
 ) {

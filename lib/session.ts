@@ -1,21 +1,21 @@
-import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies"
 import { cookies } from "next/headers"
 import { randomBytes, createHash, BinaryLike } from "node:crypto"
-import { verify, sign } from "jsonwebtoken"
+import kv from "@vercel/kv"
 
-declare module AppSession {
-  type Session = {
+declare global {
+  interface SessionUser {
     id: number
     email: string
-    created_at: string | Date
-    updated_at: string | Date
+  }
+
+  interface Session {
+    user?: SessionUser
   }
 }
 
-const hash = (input: BinaryLike) => createHash('sha256').update(input).digest('hex')
-
+const hash = (input: BinaryLike) => createHash('sha256').update(input).digest('hex') 
 const cookieSecret = process.env.COOKIE_SECRET ?? hash(randomBytes(16))
-const cookieName = process.env.COOKIE_NAME ?? 'next-cookie'
+const cookieName = process.env.COOKIE_NAME ?? 'app-session'
 
 if (!cookieSecret) {
   console.error("You should supply a cookie secret")
@@ -24,30 +24,31 @@ if (!cookieSecret) {
   }
 }
 
-export const session = {
-  get(): AppSession.Session {
-    const cookiesList = cookies()
-    let cookie: RequestCookie = cookiesList.get(cookieName)
-    if (cookie && cookie.value) {
-      return verify(cookie.value, cookieSecret)
-    }
+function getSessionKey() {
+  let cookiesList = cookies()
+  return cookiesList.get(cookieName).value
+}
+
+const storage = {
+  async get<T extends Session, K extends keyof T>(key: K) {
+    let sessionKey = getSessionKey()
+    return await kv.hget(sessionKey, key as string) as T[K] | null
   },
 
-  async set(data: AppSession.Session & Record<string, any>) {
-    const cookiesList = cookies()
-    let token = await new Promise(res => {
-      sign(data, cookieSecret, {}, (err, token) => {
-        res(token)
-      })
-    })
-
-    // @ts-ignore
-    cookiesList.set(cookieName, token)
+  async getAll<T extends Session>() {
+    let sessionKey = getSessionKey()
+    return await kv.hgetall(sessionKey) ?? {} as T
   },
 
-  destroy() {
-    let cookiesList = cookies()
-    // @ts-ignore
-    cookiesList.delete(cookieName)
+  async set(key, value) {
+    let sessionKey = getSessionKey()
+    await kv.hset(sessionKey, { [key]: value })
+  },
+
+  async destroy() {
+    let sessionKey = getSessionKey()
+    await kv.del(sessionKey)
   }
 }
+
+export { storage }

@@ -1,9 +1,9 @@
 "use server"
 
-import { session } from "@/lib/session"
+import { storage } from "@/lib/session"
 
 export async function requireUser() {
-  let user = await session.get()
+  let user = await storage.get('user')
 
   if (!user) {
     throw new Error("Unauthorized")

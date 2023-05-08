@@ -1,11 +1,12 @@
-import { getChallenge, getUser, getUserSettings, logoutUser } from "../actions"
+import { storage } from "@/lib/session"
+import { getUserSettings, logoutUser } from "../actions"
 
 import { Continue } from "./continue"
 import { LoginForm } from "./login-form"
 
 export default async function Page() {
 
-  const user = await getUser()
+  const user = await storage.get('user')
 
   return (
     <div>

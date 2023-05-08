@@ -7,6 +7,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LucideCheck, LucideLoader2 } from "lucide-react";
 
+import { useZact } from "zact/client"
+import { testAction } from "../actions";
+
 const apiState = {
   idle: "idle",
   loading: "loading",
@@ -21,7 +24,7 @@ export function LoginForm(props: any) {
   const [error, setError] = useState<string | null>()
 
   async function handleGetUserSettings(ev: FormData) {
-    const email = ev.get('email')
+    const email = ev.get('email') as string
 
     if (email.length === 0) {
       setError("Invalid email address")
@@ -29,7 +32,7 @@ export function LoginForm(props: any) {
       return
     }
 
-    let result = await props.getUserSettings(email)
+    let result = await testAction({ email })
     setTimeout(() => {
       setBtnState("success")
 

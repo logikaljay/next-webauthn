@@ -1,14 +1,13 @@
 import { users } from "@/db/managers/users"
 import { requireUser } from "./actions"
 import { TogglePasskey } from "./toggle-passkey"
-import { getChallenge } from "../auth/actions"
 import { PublicKeyCredentialWithAttestationJSON } from "@github/webauthn-json"
-import { registerPasskey } from "@/lib/passkey"
+import { registerPasskey, getChallenge } from "@/lib/passkey"
 import { Separator } from "@/components/ui/separator"
-import { session } from "@/lib/session"
 import { SignOutButton } from "./sign-out"
 import { EnrolledPasskeys } from "./enrolled-passkeys"
 import { revalidatePath } from "next/cache"
+import { storage } from "@/lib/session"
 
 export default async function AdminPage() {
 
@@ -37,7 +36,7 @@ export default async function AdminPage() {
 
   async function signOut() {
     "use server"
-    session.destroy()
+    await storage.destroy()
   }
 
   async function togglePasskey(value: boolean) {

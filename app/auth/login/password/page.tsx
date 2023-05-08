@@ -2,8 +2,7 @@
 import { users } from "@/db/managers/users";
 import { verifyPassword } from "../../actions";
 import { CredentialsForm } from "./credentials-form";
-import { cookies } from "next/headers";
-import { session } from "@/lib/session";
+import { storage } from "@/lib/session";
 
 export default async function CredentialsPage() {
 
@@ -19,7 +18,7 @@ export default async function CredentialsPage() {
     if (isValid) {
       delete user.salt
       delete user.hash
-      await session.set(user)
+      await storage.set('user', user)
       return { success: true, user }
     }
     else {

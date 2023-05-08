@@ -1,9 +1,9 @@
 import { PasskeyForm } from "./passkey-form";
-import { getChallenge } from "../../actions";
+import { getChallenge } from "@/lib/passkey";
 import { users } from "@/db/managers/users";
 import { PublicKeyCredentialWithAssertionJSON } from "@github/webauthn-json";
 import { loginPasskey } from "@/lib/passkey";
-import { session } from "@/lib/session";
+import { storage } from "@/lib/session";
 import { redirect } from "next/navigation";
 
 export default async function PasskeyPage({ searchParams }) {
@@ -31,7 +31,7 @@ export default async function PasskeyPage({ searchParams }) {
       delete user.user_id
       delete user.should_change_password
       delete user.require_passkey
-      await session.set(user)
+      await storage.set('user', user)
       return { success, user }
     }
     catch (err) {
