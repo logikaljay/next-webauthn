@@ -1,18 +1,16 @@
-"use client";
-
 import { FormEvent } from "react"
-import { action } from "./action"
+import { Button } from "../components/ui/button"
 
 export default function Index() {
 
   async function submitData(ev: FormEvent) {
-    let result = await action({ firstName: "jimbob" })
-    console.log(result)
+  }
+
+  async function handleChallenge() {
   }
   
   return (
     <div className="p-10 flex flex-col">
-      <button onClick={submitData}>Submit</button>
     </div>
   )
 }
