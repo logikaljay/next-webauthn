@@ -5,36 +5,21 @@ import { PublicKeyCredentialWithAttestationJSON } from "@github/webauthn-json"
 import { registerPasskey, getChallenge } from "@/lib/passkey"
 import { Separator } from "@/components/ui/separator"
 import { SignOutButton } from "./sign-out"
-import { EnrolledPasskeys } from "./enrolled-passkeys"
 import { revalidatePath } from "next/cache"
 import { storage } from "@/lib/session"
 import { ChangePassword } from "./change-password"
 import { getUrl } from "@/lib/get-url"
+import { PasskeyList } from "@/components/passkey/list"
 
 export default async function AdminPage() {
 
   const user = await requireUser()
   const settings = await users.getUserSettings(user.id)
   const credentials = await users.getAllCredentialsForUserId(user.id)
-
-  const url = await getUrl()
-  const rp = {
-    id: url.host.indexOf('localhost:') > -1 ? 'localhost' : url.host,
-    name: url.host.indexOf('localhost:') > -1 ? 'localhost' : url.host.split('.')[0]
-  }
   
   async function handleGetChallenge() {
     "use server"
     return await getChallenge()
-  }
-
-  async function enrollPasskey(credential: PublicKeyCredentialWithAttestationJSON) {
-    "use server"
-    console.log('enrolling passkey', credential)
-    const challenge = await getChallenge()
-    
-    await registerPasskey(user, credential, challenge)
-    revalidatePath('/admin')
   }
 
   async function signOut() {
@@ -58,13 +43,10 @@ export default async function AdminPage() {
       <div className="space-y-3">
         <h2 className="scroll-m-20 text-xl font-semibold tracking-tight">Your passkeys</h2>
 
-        <EnrolledPasskeys 
+        <PasskeyList 
           credentials={credentials} 
-          rp={rp}
           user={user}
           settings={settings as any} 
-          enrollPasskey={enrollPasskey} 
-          getChallenge={handleGetChallenge}  
         />
 
         <TogglePasskey 

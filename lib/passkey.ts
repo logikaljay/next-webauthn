@@ -14,7 +14,7 @@ function clean(str: string) {
 }
 
 const HOST_SETTINGS = (url: URL) => ({
-  expectedOrigin: url.origin.indexOf('localhost:') > -1 ? 'localhost' : url.origin,
+  expectedOrigin: url.origin,
   expectedRPID: url.host.indexOf('localhost:') > -1 ? 'localhost' : url.host
 })
 

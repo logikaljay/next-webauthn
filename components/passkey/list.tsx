@@ -2,24 +2,19 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { PublicKeyCredentialWithAttestationJSON, create } from "@github/webauthn-json"
-import { LucideSmartphone } from "lucide-react"
+import { create } from "@github/webauthn-json"
+import { LucideFingerprint } from "lucide-react"
+import { enrollPasskey, generateChallenge, generateRelyParty } from "./actions"
 
-type EnrolledPasskeyProps = {
+type PasskeyListProps = {
   credentials: any[]
   user: any
   settings: {
     require_passkey: boolean
   }
-  enrollPasskey: (credential: PublicKeyCredentialWithAttestationJSON) => Promise<void>
-  getChallenge: () => Promise<string>
-  rp: {
-    id: string
-    name: string
-  }
 }
 
-export function EnrolledPasskeys(props: EnrolledPasskeyProps) {
+export function PasskeyList(props: PasskeyListProps) {
 
   const credentials = props.credentials
 
@@ -27,15 +22,13 @@ export function EnrolledPasskeys(props: EnrolledPasskeyProps) {
 
   async function handleEnrollPasskey() {
 
-    let challenge = await props.getChallenge()
+    let rp = await generateRelyParty({})
+    let challenge = await generateChallenge({})
 
     const credential = await create({
       publicKey: {
         challenge,
-        rp: {
-          name: props.rp.name,
-          id: props.rp.id
-        },
+        rp,
         user: {
           id: window.crypto.randomUUID(),
           name: props.user.email,
@@ -51,15 +44,15 @@ export function EnrolledPasskeys(props: EnrolledPasskeyProps) {
       }
     })
 
-    props.enrollPasskey(credential)
+    await enrollPasskey({ user: props.user, credential })
   }
 
   return (
     <>
       {credentials.map(credential => (
-        <Card key={credential.external_id} className={"w-[240px]"}>
+        <Card key={credential.external_id} className={"w-[240px] bg-muted/20"}>
           <CardHeader>
-            <CardTitle><LucideSmartphone className="w-6 h-6" /></CardTitle>
+            <CardTitle><LucideFingerprint className="w-6 h-6" /></CardTitle>
           </CardHeader>
           <CardContent>
             <CardDescription className="break-all">

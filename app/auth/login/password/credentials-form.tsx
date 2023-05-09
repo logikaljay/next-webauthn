@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { Loading } from "@/components/loading"
-import { LucideCheck } from "lucide-react"
+import { LucideCheck, LucideKey } from "lucide-react"
 import { handleVerifyUser } from "./actions"
 
 const ApiState = {
@@ -84,16 +84,20 @@ export function CredentialsForm() {
         </Alert>
       )}
 
-      <Button onClick={handleLoginClick} type="submit" variant="default" size="xl" className="ml-auto">
+      <Button onClick={handleLoginClick} type="submit" variant="default" size="xl" className="flex space-x-3 py-3 h-auto text-lg w-full">
         {btnState === "loading" && <Loading className="w-6 h-6" />}
+        
         {btnState === "idle" && (
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-          </svg>
+          <LucideKey className="w-6 h-6" />
         )}
+
+
         {btnState === "success" && (
           <LucideCheck className="w-6 h-6" />
         )}
+        
+
+        <span>Continue with password</span>
       </Button>
     </>
   )
