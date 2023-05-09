@@ -18,7 +18,7 @@ export default async function PasskeyPage({ searchParams }) {
   }
 
   const credentials = await users.getAllCredentialsForUserId(user.id)
-  const url = getUrl()
+  const url = await getUrl()
   const rp = {
     id: url.host
   }

@@ -13,11 +13,10 @@ function clean(str: string) {
   return str.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
 }
 
-const url = getUrl()
-const HOST_SETTINGS = {
+const HOST_SETTINGS = (url: URL) => ({
   expectedOrigin: url.origin,
   expectedRPID: url.host
-}
+})
 
 function binaryToBase64URL(bytes: Uint8Array) {
   return Buffer.from(bytes).toString('base64url')
@@ -54,12 +53,14 @@ export async function registerPasskey(
     throw new Error("User not found")
   }
 
+  const url = await getUrl()
+
   try {
     verification = await verifyRegistrationResponse({
       response: credential,
       expectedChallenge: challenge,
       requireUserVerification: true,
-      ...HOST_SETTINGS
+      ...HOST_SETTINGS(url)
     })
   } catch (err) {
     console.error(err)
@@ -103,6 +104,8 @@ export async function loginPasskey(email: string, credential: PublicKeyCredentia
     throw new Error("Unknown credential")
   }
 
+  const url = await getUrl()
+
   let verification: VerifiedAuthenticationResponse
   try {
     verification = await verifyAuthenticationResponse({
@@ -113,7 +116,7 @@ export async function loginPasskey(email: string, credential: PublicKeyCredentia
         credentialPublicKey: Uint8Array.from(Buffer.from(user.public_key, 'base64')),
         counter: user.sign_count as number
       },
-      ...HOST_SETTINGS
+      ...HOST_SETTINGS(url)
     })
 
     await users.updateCredentialSignCount(user.external_id, verification.authenticationInfo.newCounter)

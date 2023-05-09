@@ -8,7 +8,7 @@ export default async function AuthLayout({
 }) {
   
   const user = await getUser()
-  const url = getUrl()
+  const url = await getUrl()
   const appUrl = url.host
 
   return (

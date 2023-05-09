@@ -17,7 +17,7 @@ export default async function AdminPage() {
   const settings = await users.getUserSettings(user.id)
   const credentials = await users.getAllCredentialsForUserId(user.id)
 
-  const url = getUrl()
+  const url = await getUrl()
   const rp = {
     id: url.host,
     name: url.host.split('.')[0]
