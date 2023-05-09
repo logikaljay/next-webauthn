@@ -19,8 +19,8 @@ export default async function AdminPage() {
 
   const url = await getUrl()
   const rp = {
-    id: url.host,
-    name: url.host.split('.')[0]
+    id: url.host.indexOf('localhost:') > -1 ? 'localhost' : url.host,
+    name: url.host.indexOf('localhost:') > -1 ? 'localhost' : url.host.split('.')[0]
   }
   
   async function handleGetChallenge() {
