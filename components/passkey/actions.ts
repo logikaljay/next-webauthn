@@ -48,7 +48,7 @@ export const generateRelyParty = zact(
   async () => {
     const url = await getUrl()
     return {
-      id: url.origin.indexOf('localhost:') > -1 ? 'localhost' : url.origin,
+      id: url.host.indexOf('localhost:') > -1 ? 'localhost' : url.host,
       name: url.host.indexOf('localhost:') > -1 ? 'localhost' : url.host.split('.')[0]
     }
   }

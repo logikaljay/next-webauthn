@@ -37,7 +37,7 @@ export function PasskeyList(props: PasskeyListProps) {
           displayName: props.user.email
         },
         pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
-        timeout: 60000,
+        timeout: 60_000,
         attestation: 'direct',
         authenticatorSelection: {
           residentKey: 'required',
