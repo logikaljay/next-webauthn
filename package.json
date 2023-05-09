@@ -28,7 +28,7 @@
     "encoding": "^0.1.13",
     "jsonwebtoken": "^9.0.0",
     "lucide-react": "^0.214.0",
-    "next": "^13.4.1",
+    "next": "^13.4.2-canary.2",
     "pg": "^8.10.0",
     "tailwind-merge": "^1.12.0",
     "tailwindcss-animate": "^1.0.5",

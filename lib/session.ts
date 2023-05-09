@@ -40,7 +40,7 @@ const storage = {
     return await kv.hgetall(sessionKey) ?? {} as T
   },
 
-  async set(key, value) {
+  async set<T extends Session, K extends keyof T>(key: K, value: T[K]) {
     let sessionKey = getSessionKey()
     await kv.hset(sessionKey, { [key]: value })
   },

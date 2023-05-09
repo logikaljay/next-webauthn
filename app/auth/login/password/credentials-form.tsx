@@ -7,40 +7,68 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { Loading } from "@/components/loading"
 import { LucideCheck } from "lucide-react"
+import { handleVerifyUser } from "./actions"
 
 const ApiState = {
   idle: "idle",
   loading: "loading",
   success: "success",
   error: "error"
-}
+} as const
 
-export function CredentialsForm(props: any) {
+
+export function CredentialsForm() {
 
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const [email, setEmail] = useState(searchParams.get('email') ?? '')
+  const [password, setPassword] = useState('')
   const [btnState, setBtnState] = useState<keyof typeof ApiState>("idle")
   
   const [error, setError] = useState<string | null>()
-  const searchParams = useSearchParams()
-  const email = searchParams.get('email') ?? ''
 
-  async function handleLoginClick() {
+  async function handleLoginClick(e) {
+    e.preventDefault()
+
     setBtnState("loading")
 
-    // @ts-ignore
-    const formData = new FormData(document.forms.loginWithCredentials)
-    await props.handleVerifyUser(formData)
+    try {
+      let result = await handleVerifyUser({
+        email,
+        password
+      })
 
-    setBtnState("success")
-    setTimeout(() => {
-      router.push('/admin')
-    }, 250)
+      if (result.ok) {
+        setBtnState("success")
+        setTimeout(() => {
+          router.push('/admin')
+        }, 250)
+      }
+      else {
+        setError(result.error)
+        setBtnState("idle")
+      }
+    } catch (err) {
+      setError(err.message)
+      setBtnState("idle")
+    }
   }
 
   return (
     <>
-      <Input defaultValue={email} name="email" type="email" placeholder="Email address" className="p-4 text-base h-auto" />
-      <Input name="password" type="password" placeholder="Password" className="p-4 text-base h-auto" />
+      <Input 
+        type="email" 
+        value={email} onChange={e => setEmail(e.target.value)} 
+        name="email" placeholder="Email address" 
+        className="p-4 text-base h-auto" 
+      />
+      <Input 
+        type="password"
+        value={password} onChange={e => setPassword(e.target.value)} 
+        name="password" placeholder="Password" 
+        className="p-4 text-base h-auto"
+      />
 
       {error && (
         <Alert variant="destructive">
@@ -55,7 +83,7 @@ export function CredentialsForm(props: any) {
         </Alert>
       )}
 
-      <Button onClick={handleLoginClick} type="button" variant="default" size="xl" className="ml-auto">
+      <Button onClick={handleLoginClick} type="submit" variant="default" size="xl" className="ml-auto">
         {btnState === "loading" && <Loading className="w-6 h-6" />}
         {btnState === "idle" && (
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

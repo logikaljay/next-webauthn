@@ -68,7 +68,3 @@ export async function logoutUser() {
   cookies().delete('webauthn-user')
   revalidatePath("/auth")
 }
-
-export async function verifyPassword(hash: string, salt: string, inputPassword: string) {
-  return createHash('sha256').update(`${salt}|${inputPassword}`).digest('hex') === hash
-}
