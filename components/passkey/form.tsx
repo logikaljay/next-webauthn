@@ -81,7 +81,7 @@ export function PasskeyForm(props: PasskeyFormProps) {
 
   return (
     <>
-      <Button variant={props.variant ?? 'outline'} onClick={handlePasskeyLogin} className="flex w-full space-x-3 py-3 h-auto text-lg">
+      <Button variant={props.variant ?? 'default'} onClick={handlePasskeyLogin} className="flex w-full space-x-3 py-3 h-auto text-lg">
         {btnState == 'loading' && <LucideLoader2 className="w-6 h-6 animate-spin" />}
         {btnState == 'idle' && <LucideFingerprint className="w-6 h-6" />}
         {btnState == 'success' && <LucideCheck className="w-6 h-6" />}

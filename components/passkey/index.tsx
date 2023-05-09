@@ -4,9 +4,11 @@ import { users } from "@/db/managers/users";
 import { redirect } from "next/navigation";
 import { getUrl } from "@/lib/get-url";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "../ui/button";
 
 interface PasskeyLoginProps {
   email?: string
+  variant?: typeof Button["defaultProps"]["variant"]
 }
 
 export async function PasskeyLogin(props: PasskeyLoginProps) {
@@ -28,20 +30,16 @@ export async function PasskeyLogin(props: PasskeyLoginProps) {
   if (credentials.length === 0) {
     return <></>
   } 
+
+  console.log(`challenge`, challenge)
   
   return (
-    <div>
-      <Separator className="my-6">
-        <div className="relative -top-2 mx-auto bg-secondary w-10 text-center text-muted-foreground text-xs font-mono">or</div>
-      </Separator>
-
-      <PasskeyForm
-        user={user}
-        credentials={credentials}
-        challenge={challenge}
-        rp={rp}
-      />
-    </div>
-
+    <PasskeyForm
+      user={user}
+      credentials={credentials}
+      challenge={challenge}
+      rp={rp}
+      variant={props.variant}
+    />
   )
 }

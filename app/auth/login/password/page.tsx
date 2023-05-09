@@ -13,8 +13,12 @@ export default async function CredentialsPage({ searchParams }) {
         <form name="loginWithCredentials" className="space-y-4">
           <CredentialsForm />
           
+          <Separator className="my-6">
+            <div className="relative -top-2 mx-auto bg-secondary w-10 text-center text-muted-foreground text-xs font-mono">or</div>
+          </Separator>
+          
           {/* @ts-ignore */}
-          <PasskeyLogin email={email} />
+          <PasskeyLogin email={email} variant="outline" />
         </form>
       </div>
     </div>
