@@ -8,6 +8,7 @@ import { SignOutButton } from "./sign-out"
 import { EnrolledPasskeys } from "./enrolled-passkeys"
 import { revalidatePath } from "next/cache"
 import { storage } from "@/lib/session"
+import { ChangePassword } from "./change-password"
 
 export default async function AdminPage() {
 
@@ -52,7 +53,6 @@ export default async function AdminPage() {
 
       <Separator className="my-4" />
 
-
       <div className="space-y-3">
         <h2 className="scroll-m-20 text-xl font-semibold tracking-tight">Your passkeys</h2>
 
@@ -76,7 +76,10 @@ export default async function AdminPage() {
 
       <Separator className="my-4" />
 
-      <SignOutButton signOut={signOut} />
+      <div className="flex space-x-3">
+        <ChangePassword force={settings.should_change_password} />
+        <SignOutButton signOut={signOut} />
+      </div>
     </div>
   )
 }

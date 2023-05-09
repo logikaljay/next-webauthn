@@ -21,11 +21,9 @@ export function Continue(props: any) {
       <p className="text-normal">{user.email} is currently logged in. If this is you press continue. Otherwise please sign out.</p>
 
       <div className="actions flex">
-        <form action={props.logoutUser}>
-          <Button type="submit" variant="link" size="xl">
-            Sign out
-          </Button>
-        </form>
+        <Button onClick={handleLogout} variant="link" size="xl">
+          Sign out
+        </Button>
         
         <Button onClick={handleContinue} type="button" size="xl" className="ml-auto">
           Continue

@@ -64,6 +64,7 @@ export function CredentialsForm() {
         className="p-4 text-base h-auto" 
       />
       <Input 
+        autoFocus
         type="password"
         value={password} onChange={e => setPassword(e.target.value)} 
         name="password" placeholder="Password" 

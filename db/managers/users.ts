@@ -1,4 +1,6 @@
 import { db } from "@/db"
+import { User, UserSetting } from "../schema"
+import { Insertable, Selectable, Updateable } from "kysely"
 
 export class UserNotFound extends Error {
   constructor() {
@@ -55,7 +57,7 @@ async function getAllCredentialsForUserId(userId: number) {
   return credentials
 }
 
-async function updateSettings(id: number, settings: Record<string, boolean>) {
+async function updateSettings(id: number, settings: Updateable<UserSetting>) {
   await db.updateTable('user_setting')
     .set(settings)
     .where('user_id', '=', id)
@@ -65,9 +67,27 @@ async function updateSettings(id: number, settings: Record<string, boolean>) {
 async function updateCredentialSignCount(externalId: string, signCount: number) {
   await db.updateTable('credential')
     .set({
-      sign_count: signCount
+      sign_count: signCount,
+      updated_at: new Date()
     })
     .where('credential.external_id', '=', externalId)
+    .execute()
+}
+
+/**
+ * 
+ * @param user the user to update the password for
+ * @param newPassword The users password
+ */
+async function updateUser({ id, ...user }: Omit<Updateable<User>, "created_at" | "updated_at">) {
+  await db.updateTable('user')
+    .set({
+      email: user.email,
+      salt: user.salt,
+      hash: user.hash,
+      updated_at: new Date()
+    })
+    .where("id", '=', id)
     .execute()
 }
 
@@ -78,7 +98,8 @@ const users = {
   getUserCredential,
   getUserSettings,
   updateSettings,
-  updateCredentialSignCount
+  updateCredentialSignCount,
+  updateUser
 }
 
 export { users }

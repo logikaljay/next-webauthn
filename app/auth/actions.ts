@@ -16,18 +16,6 @@ function clean(str: string) {
   return str.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
 }
 
-// export async function getChallenge() {
-
-//   if (cookies().get('webauthn-challenge')) {
-//     return cookies().get('webauthn-challenge').value
-//   }
-
-//   let challenge = clean(randomBytes(32).toString("base64"));
-//   // @ts-ignore
-//   cookies().set('webauthn-challenge', challenge)
-
-//   return challenge
-// }
 
 export const testAction = zact(z.object({
   email: z.string().email()
@@ -61,10 +49,4 @@ export async function getUserSettings(email: string) {
   else {
     return { success: false, error: "Invalid user or password" }
   }
-}
-
-export async function logoutUser() {
-  // @ts-ignore
-  cookies().delete('webauthn-user')
-  revalidatePath("/auth")
 }
