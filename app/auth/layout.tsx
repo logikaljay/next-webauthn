@@ -1,3 +1,4 @@
+import { getUrl } from "@/lib/get-url"
 import { getUser } from "./actions"
 
 export default async function AuthLayout({
@@ -7,7 +8,7 @@ export default async function AuthLayout({
 }) {
 
   const user = await getUser()
-  const appUrl = process.env.VERCEL_URL ?? process.env.APP_URL ?? 'localhost'
+  const appUrl = getUrl()
 
   return (
     <div className="flex h-screen flex-col justify-between w-full lg:max-w-[500px] px-[40px] lg:px-[80px] py-[20px] lg:py-[40px] bg-secondary text-secondary-foreground">
