@@ -9,6 +9,7 @@ import { EnrolledPasskeys } from "./enrolled-passkeys"
 import { revalidatePath } from "next/cache"
 import { storage } from "@/lib/session"
 import { ChangePassword } from "./change-password"
+import { getUrl } from "@/lib/get-url"
 
 export default async function AdminPage() {
 
@@ -16,9 +17,10 @@ export default async function AdminPage() {
   const settings = await users.getUserSettings(user.id)
   const credentials = await users.getAllCredentialsForUserId(user.id)
 
+  const url = getUrl()
   const rp = {
-    id: process.env.RP_ID,
-    name: process.env.RP_NAME
+    id: url.host,
+    name: url.host.split('.')[0]
   }
   
   async function handleGetChallenge() {

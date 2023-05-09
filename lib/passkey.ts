@@ -7,14 +7,16 @@ import { verifyAuthenticationResponse, verifyRegistrationResponse } from "@simpl
 import { users } from "@/db/managers/users"
 import { storage } from "./session"
 import { randomBytes } from "node:crypto"
+import { getUrl } from "./get-url";
 
 function clean(str: string) {
   return str.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
 }
 
+const url = getUrl()
 const HOST_SETTINGS = {
-  expectedOrigin: process.env.APP_URL ?? 'http://localhost:3000',
-  expectedRPID: process.env.RP_ID ?? 'localhost'
+  expectedOrigin: url.origin,
+  expectedRPID: url.host
 }
 
 function binaryToBase64URL(bytes: Uint8Array) {

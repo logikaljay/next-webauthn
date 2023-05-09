@@ -1,5 +1,5 @@
 import { cookies } from "next/headers"
-import { randomBytes, createHash, BinaryLike } from "node:crypto"
+import bcryptjs from "bcryptjs"
 import kv from "@vercel/kv"
 
 declare global {
@@ -13,8 +13,8 @@ declare global {
   }
 }
 
-const hash = (input: BinaryLike) => createHash('sha256').update(input).digest('hex') 
-const cookieSecret = process.env.COOKIE_SECRET ?? hash(randomBytes(16))
+// const hash = (input: BinaryLike) => createHash('sha256').update(input).digest('hex') 
+const cookieSecret = process.env.COOKIE_SECRET ?? bcryptjs.hashSync(crypto.randomUUID())
 const cookieName = process.env.COOKIE_NAME ?? 'app-session'
 
 if (!cookieSecret) {

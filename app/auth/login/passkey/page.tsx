@@ -5,6 +5,7 @@ import { PublicKeyCredentialWithAssertionJSON } from "@github/webauthn-json";
 import { loginPasskey } from "@/lib/passkey";
 import { storage } from "@/lib/session";
 import { redirect } from "next/navigation";
+import { getUrl } from "@/lib/get-url";
 
 export default async function PasskeyPage({ searchParams }) {
 
@@ -17,8 +18,9 @@ export default async function PasskeyPage({ searchParams }) {
   }
 
   const credentials = await users.getAllCredentialsForUserId(user.id)
+  const url = getUrl()
   const rp = {
-    id: process.env.RP_ID
+    id: url.host
   }
 
   async function verifyPasskey(credential: PublicKeyCredentialWithAssertionJSON) {

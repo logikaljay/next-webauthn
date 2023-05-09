@@ -6,9 +6,10 @@ export default async function AuthLayout({
 }: {
   children: React.ReactNode
 }) {
-
+  
   const user = await getUser()
-  const appUrl = getUrl()
+  const url = getUrl()
+  const appUrl = url.host
 
   return (
     <div className="flex h-screen flex-col justify-between w-full lg:max-w-[500px] px-[40px] lg:px-[80px] py-[20px] lg:py-[40px] bg-secondary text-secondary-foreground">
