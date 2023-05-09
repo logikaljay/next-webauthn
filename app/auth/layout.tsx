@@ -7,6 +7,7 @@ export default async function AuthLayout({
 }) {
 
   const user = await getUser()
+  const appUrl = process.env.VERCEL_URL ?? process.env.APP_URL ?? 'localhost'
 
   return (
     <div className="flex h-screen flex-col justify-between w-full lg:max-w-[500px] px-[40px] lg:px-[80px] py-[20px] lg:py-[40px] bg-secondary text-secondary-foreground">
@@ -14,7 +15,7 @@ export default async function AuthLayout({
         <div className="w-14 h-14 bg-slate-400 mr-4 rounded" />
         <div>
           <p className="text-xl mt-1">webauthn</p>
-          <p className="text-sm text-muted-foreground">app</p>
+          <p className="text-sm text-muted-foreground">{appUrl}</p>
         </div>
       </div>
 
