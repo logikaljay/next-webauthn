@@ -6,6 +6,7 @@ import { getChallenge, loginPasskey, registerPasskey } from "@/lib/passkey"
 import { storage } from "@/lib/session"
 import { getUrl } from "@/lib/get-url"
 import { revalidatePath } from "next/cache"
+import { users } from "@/db/managers/users"
 
 export const verifyPasskey = zact(
   z.object({
@@ -67,3 +68,17 @@ export const enrollPasskey = zact(
     revalidatePath('/admin')
   }
 )
+
+export const deletePasskey = zact(
+  z.object({
+    externalId: z.string()
+  })
+)(
+  async (input) => {
+    await users.deletePasskey(input.externalId)
+  }
+)
+
+export async function revalidate() {
+  revalidatePath('/admin')
+}

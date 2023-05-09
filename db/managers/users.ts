@@ -74,11 +74,6 @@ async function updateCredentialSignCount(externalId: string, signCount: number) 
     .execute()
 }
 
-/**
- * 
- * @param user the user to update the password for
- * @param newPassword The users password
- */
 async function updateUser({ id, ...user }: Omit<Updateable<User>, "created_at" | "updated_at">) {
   await db.updateTable('user')
     .set({
@@ -91,6 +86,12 @@ async function updateUser({ id, ...user }: Omit<Updateable<User>, "created_at" |
     .execute()
 }
 
+async function deletePasskey(externalId: string) {
+  await db.deleteFrom('credential')
+    .where('external_id', '=', externalId)
+    .execute()
+}
+
 const users = {
   getUserByEmail,
   getCredentialsForUserId,
@@ -99,7 +100,8 @@ const users = {
   getUserSettings,
   updateSettings,
   updateCredentialSignCount,
-  updateUser
+  updateUser,
+  deletePasskey
 }
 
 export { users }

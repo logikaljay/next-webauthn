@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { create } from "@github/webauthn-json"
 import { LucideFingerprint } from "lucide-react"
 import { enrollPasskey, generateChallenge, generateRelyParty } from "./actions"
+import { ConfirmDelete } from "./confirm-delete"
+import { DateString } from "../date-string"
 
 type PasskeyListProps = {
   credentials: any[]
@@ -50,17 +52,21 @@ export function PasskeyList(props: PasskeyListProps) {
   return (
     <>
       {credentials.map(credential => (
-        <Card key={credential.external_id} className={"w-[240px] bg-muted/20"}>
+        <Card key={credential.external_id} className={"w-[185px] bg-muted/20"}>
           <CardHeader>
-            <CardTitle><LucideFingerprint className="w-6 h-6" /></CardTitle>
+            <CardTitle className="flex">
+              <LucideFingerprint className="w-6 h-6 flex-shrink-0" />
+              <span className="my-auto ml-2 truncate break-all block text-xs font-normal">{credential.external_id}</span>
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <CardDescription className="break-all">
-              {credential.external_id}
+            <CardDescription className="break-all text-sm flex flex-col">
+              <span>Created <DateString date={credential.created_at} /></span>
+              <span>Used {credential.sign_count} {credential.sign_count == 1 ? "time" : "times"}</span>
             </CardDescription>
           </CardContent>
           <CardFooter className="pb-2">
-            <Button variant="link">Delete</Button>
+            <ConfirmDelete externalId={credential.external_id} />
           </CardFooter>
         </Card>
       ))}
