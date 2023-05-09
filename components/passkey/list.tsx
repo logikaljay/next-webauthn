@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { LucideFingerprint } from "lucide-react"
 import { ConfirmDelete } from "./confirm-delete"
 import { DateString } from "../date-string"
+import { RelativeString } from "../relative-string"
 
 type PasskeyListProps = {
   credentials: any[]
@@ -29,10 +30,10 @@ export function PasskeyList(props: PasskeyListProps) {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <CardDescription className="break-all text-sm flex flex-col">
+              <CardDescription className="break-all text-sm flex flex-col space-y-1">
+                {/* <span className="font-medium pb-1">Used {credential.sign_count} {credential.sign_count == 1 ? "time" : "times"}</span> */}
                 <span>Created <DateString date={credential.created_at} /></span>
-                <span>Used {credential.sign_count} {credential.sign_count == 1 ? "time" : "times"}</span>
-                <span className="break-all block font-normal mt-2 text-xs ">{credential.external_id}</span>
+                <span>Last used <RelativeString date={credential.updated_at} /></span>
               </CardDescription>
             </CardContent>
             <CardFooter className="pb-2">

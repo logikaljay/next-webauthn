@@ -35,7 +35,8 @@ export async function PasskeyLogin(props: PasskeyLoginProps) {
         <div className="relative -top-2 mx-auto bg-secondary w-10 text-center text-muted-foreground text-xs font-mono">or</div>
       </Separator>
 
-      <PasskeyForm 
+      <PasskeyForm
+        user={user}
         credentials={credentials}
         challenge={challenge}
         rp={rp}

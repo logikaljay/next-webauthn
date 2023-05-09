@@ -65,6 +65,9 @@ async function updateSettings(id: number, settings: Updateable<UserSetting>) {
 }
 
 async function updateCredentialSignCount(externalId: string, signCount: number) {
+
+  console.log(`updating sign_count for`, externalId, `to`, signCount)
+
   await db.updateTable('credential')
     .set({
       sign_count: signCount,

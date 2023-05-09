@@ -7,6 +7,8 @@ import { LucideCheck, LucideFingerprint, LucideLoader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { verifyPasskey } from "./actions";
+import { Selectable } from "kysely";
+import { User } from "@/db/schema";
 
 const ApiState = {
   idle: "idle",
@@ -15,7 +17,18 @@ const ApiState = {
   error: "error"
 } as const
 
-export function PasskeyForm(props: any) {
+type PasskeyFormProps = {
+  variant?: typeof Button["defaultProps"]["variant"]
+  challenge: string
+  credentials: any[]
+  user: Selectable<User>
+  rp: {
+    id: string
+    name: string
+  }
+}
+
+export function PasskeyForm(props: PasskeyFormProps) {
 
   console.log(props)
   const router = useRouter()
@@ -68,7 +81,7 @@ export function PasskeyForm(props: any) {
 
   return (
     <>
-      <Button variant="outline" onClick={handlePasskeyLogin} className="flex w-full space-x-3 py-3 h-auto text-lg">
+      <Button variant={props.variant ?? 'outline'} onClick={handlePasskeyLogin} className="flex w-full space-x-3 py-3 h-auto text-lg">
         {btnState == 'loading' && <LucideLoader2 className="w-6 h-6 animate-spin" />}
         {btnState == 'idle' && <LucideFingerprint className="w-6 h-6" />}
         {btnState == 'success' && <LucideCheck className="w-6 h-6" />}

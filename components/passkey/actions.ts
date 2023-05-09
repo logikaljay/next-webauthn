@@ -29,7 +29,7 @@ export const verifyPasskey = zact(
     }
     catch (err) {
       console.error(err)
-      return { ok: false, error: err }
+      return { ok: false, error: err.message }
     }
   }
 )

@@ -28,6 +28,7 @@ const apiState = {
 
 export function EnrollPasskey(props: any) {
 
+  const [open, setOpen] = useState<boolean>(false)
   const [state, setState] = useState<keyof typeof apiState>("idle")
   const [name, setName] = useState<string>()
   console.log(`enroll-passkey props`, props)
@@ -61,11 +62,12 @@ export function EnrollPasskey(props: any) {
     setState("success")
     setTimeout(async () => {
       await revalidate()
+      setOpen(false)
     }, 250)
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">Add a passkey</Button>
       </DialogTrigger>
