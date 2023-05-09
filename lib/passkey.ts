@@ -31,7 +31,7 @@ declare global {
 export async function getChallenge() {
   let challenge = await storage.get('challenge') as string
   if (!challenge) {
-    let challenge = clean(randomBytes(32).toString("base64"));
+    challenge = clean(randomBytes(32).toString("base64"));
     await storage.set('challenge', challenge)
   }
 

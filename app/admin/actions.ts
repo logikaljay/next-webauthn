@@ -6,6 +6,7 @@ import { createHash } from "crypto"
 import { z } from "zod"
 import { zact } from "zact/server"
 import { revalidatePath } from "next/cache"
+import { headers } from "next/headers"
 
 export async function requireUser() {
   let user = await storage.get('user')
@@ -88,6 +89,15 @@ export const shouldChangePassword = zact(
     })
 
     return { ok: true }
+  }
+)
+
+export const getUserAgent = zact(
+  z.object({}).optional()
+)(
+  async (input) => {
+    let headersList = headers()
+    return headersList.get('user-agent')
   }
 )
 

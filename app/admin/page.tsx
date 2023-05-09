@@ -1,5 +1,5 @@
 import { users } from "@/db/managers/users"
-import { requireUser } from "./actions"
+import { getUserAgent, requireUser } from "./actions"
 import { TogglePasskey } from "./toggle-passkey"
 import { PublicKeyCredentialWithAttestationJSON } from "@github/webauthn-json"
 import { registerPasskey, getChallenge } from "@/lib/passkey"
@@ -18,11 +18,6 @@ export default async function AdminPage() {
   const settings = await users.getUserSettings(user.id)
   const credentials = await users.getAllCredentialsForUserId(user.id)
   
-  async function handleGetChallenge() {
-    "use server"
-    return await getChallenge()
-  }
-
   async function signOut() {
     "use server"
     await storage.destroy()
