@@ -14,6 +14,7 @@ export interface Account {
 
 export interface Credential {
   id: Generated<number>;
+  name: string | null;
   external_id: string;
   public_key: string;
   sign_count: Generated<number | null>;

@@ -48,9 +48,11 @@ async function main() {
     })
     .execute()
 
+  await db.destroy()
+  
   console.log(` email: ${email}\n password: ${randomPassword}\n`)
-
   console.log(`🌱 finished seeding database`)
+
 }
 
 main()

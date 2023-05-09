@@ -58,14 +58,15 @@ export const enrollPasskey = zact(
   z.object({
     user: z.any(),
     credential: z.any(),
+    name: z.string()
   })
 )(
   async (input) => {
     const challenge = await generateChallenge({})
     const user = input.user
     const credential = input.credential
-    await registerPasskey(user, credential, challenge)
-    revalidatePath('/admin')
+    const name = input.name
+    await registerPasskey(user, credential, challenge, name)
   }
 )
 

@@ -41,7 +41,8 @@ export async function getChallenge() {
 export async function registerPasskey(
   user: SessionUser, 
   credential: PublicKeyCredentialWithAttestationJSON, 
-  challenge: string
+  challenge: string,
+  name: string
 ) {
   let verification: VerifiedRegistrationResponse
 
@@ -80,7 +81,8 @@ export async function registerPasskey(
     .values({
       external_id: clean(binaryToBase64URL(credentialID)),
       public_key: Buffer.from(credentialPublicKey).toString('base64'),
-      user_id: user.id
+      user_id: user.id,
+      name
     })
     .execute()
 

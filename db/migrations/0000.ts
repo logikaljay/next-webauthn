@@ -14,6 +14,7 @@ export async function up(db: Kysely<any>) {
   db.schema
     .createTable('credential')
     .addColumn('id', 'serial', col => col.primaryKey())
+    .addColumn('name', 'varchar')
     .addColumn('external_id', 'varchar', col => col.notNull().unique())
     .addColumn('public_key', 'varchar', col => col.notNull().unique())
     .addColumn('sign_count', 'integer', col => col.defaultTo(0))

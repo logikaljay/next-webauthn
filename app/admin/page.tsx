@@ -10,6 +10,7 @@ import { storage } from "@/lib/session"
 import { ChangePassword } from "./change-password"
 import { getUrl } from "@/lib/get-url"
 import { PasskeyList } from "@/components/passkey/list"
+import { EnrollPasskey } from "@/components/passkey/enroll"
 
 export default async function AdminPage() {
 
@@ -47,6 +48,10 @@ export default async function AdminPage() {
           credentials={credentials} 
           user={user}
           settings={settings as any} 
+        />
+
+        <EnrollPasskey 
+          user={user}
         />
 
         <TogglePasskey 
