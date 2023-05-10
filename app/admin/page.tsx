@@ -1,23 +1,27 @@
 import { users } from "@/db/managers/users"
-import { getUserAgent, requireUser } from "./actions"
+import { requireUser } from "./actions"
 import { TogglePasskey } from "./toggle-passkey"
-import { PublicKeyCredentialWithAttestationJSON } from "@github/webauthn-json"
-import { registerPasskey, getChallenge } from "@/lib/passkey"
 import { Separator } from "@/components/ui/separator"
 import { SignOutButton } from "./sign-out"
-import { revalidatePath } from "next/cache"
 import { storage } from "@/lib/session"
 import { ChangePassword } from "./change-password"
-import { getUrl } from "@/lib/get-url"
 import { PasskeyList } from "@/components/passkey/list"
 import { EnrollPasskey } from "@/components/passkey/enroll"
+import { redirect } from "next/navigation"
+import { destroySessionUser } from "../auth/actions"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export default async function AdminPage() {
 
   const user = await requireUser()
   const settings = await users.getUserSettings(user.id)
+  if (!settings) {
+    await destroySessionUser()
+    redirect('/auth/login')
+  }
+
   const credentials = await users.getAllCredentialsForUserId(user.id)
-  
+
   async function signOut() {
     "use server"
     await storage.destroy()
@@ -32,7 +36,14 @@ export default async function AdminPage() {
 
   return (
     <div className="flex flex-col space-y-4 m-10">
-      <p>Welcome, {user.email}</p>
+      <div className="flex flex-row">
+        <p className="my-auto">{user.email}</p>
+        <Avatar className="ml-auto">
+          <AvatarImage src={user.image} />
+          <AvatarFallback>{user.email.substring(0,2).toUpperCase()}</AvatarFallback>
+        </Avatar>
+      </div>
+
 
       <Separator className="my-4" />
 

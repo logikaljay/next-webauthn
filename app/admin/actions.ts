@@ -7,12 +7,12 @@ import { z } from "zod"
 import { zact } from "zact/server"
 import { revalidatePath } from "next/cache"
 import { headers } from "next/headers"
+import { redirect } from "next/navigation"
 
 export async function requireUser() {
   let user = await storage.get('user')
-
   if (!user) {
-    throw new Error("Unauthorized")
+    return redirect('/auth/login')
   }
 
   return user
