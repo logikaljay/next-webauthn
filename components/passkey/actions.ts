@@ -7,6 +7,7 @@ import { storage } from "@/lib/session"
 import { getUrl } from "@/lib/get-url"
 import { revalidatePath } from "next/cache"
 import { users } from "@/db/managers/users"
+import { setSessionUser } from "@/app/auth/actions"
 
 export const verifyPasskey = zact(
   z.object({
@@ -19,13 +20,16 @@ export const verifyPasskey = zact(
     try {
       const user = input.user
       let success = await loginPasskey(user.email, input.credential, input.challenge)
-      delete user.salt
-      delete user.hash
-      delete user.user_id
-      delete user.should_change_password
-      delete user.require_passkey
-      await storage.set('user', user)
-      return { ok: success, value: user }
+      if (!success) {
+        return { ok: false, error: "Could not use passkey" }
+      }
+
+      let sessionUser = await setSessionUser(user)    
+      if (!sessionUser) {
+        return { ok: false, error: "Could not create a session" }
+      }
+
+      return { ok: success, value: sessionUser }
     }
     catch (err) {
       console.error(err)
