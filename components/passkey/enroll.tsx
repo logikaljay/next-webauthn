@@ -31,7 +31,6 @@ export function EnrollPasskey(props: any) {
   const [open, setOpen] = useState<boolean>(false)
   const [state, setState] = useState<keyof typeof apiState>("idle")
   const [name, setName] = useState<string>()
-  console.log(`enroll-passkey props`, props)
 
   async function handleEnrollPasskey() {
 

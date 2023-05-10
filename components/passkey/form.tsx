@@ -30,7 +30,6 @@ type PasskeyFormProps = {
 
 export function PasskeyForm(props: PasskeyFormProps) {
 
-  console.log(props)
   const router = useRouter()
   const [btnState, setBtnState] = useState<keyof typeof ApiState>("idle")
   const [error, setError] = useState<string | null>()
