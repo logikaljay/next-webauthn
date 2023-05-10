@@ -29,13 +29,16 @@ async function main() {
   const salt = crypto.randomBytes(6).toString('hex')
   const randomPassword = crypto.randomUUID().replace(/-/g, '')
   const hash = crypto.createHash('sha256').update(`${salt}|${randomPassword}`).digest('hex')
+  const emailHash = crypto.createHash('md5').update(email).digest('hex')
+  const image = `https://www.gravatar.com/avatar/${emailHash}.jpg?s=200&d=robohash`
 
   console.log(`creating users`)
   const user = await db.insertInto('user')
     .values({
       email,
       salt,
-      hash
+      hash,
+      image
     })
     .returning('id')
     .executeTakeFirst()
