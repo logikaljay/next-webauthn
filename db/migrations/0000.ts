@@ -1,12 +1,13 @@
-import { Kysely } from "kysely";
+import { Kysely, sql } from "kysely";
 
 export async function up(db: Kysely<any>) {
   db.schema
     .createTable('user')
     .addColumn('id', 'serial', col => col.primaryKey())
     .addColumn('email', 'varchar', col => col.notNull().unique())
-    .addColumn('created_at', 'timestamp', col => col.defaultTo(new Date()))
-    .addColumn('updated_at', 'timestamp', col => col.defaultTo(new Date()))
+    .addColumn('image', 'varchar')
+    .addColumn('created_at', 'timestamp', col => col.defaultTo(sql`now()`))
+    .addColumn('updated_at', 'timestamp', col => col.defaultTo(sql`now()`))
     .addColumn('salt', 'varchar(12)', col => col.notNull())
     .addColumn('hash', 'varchar(64)', col => col.notNull())
     .execute()
@@ -18,8 +19,8 @@ export async function up(db: Kysely<any>) {
     .addColumn('external_id', 'varchar', col => col.notNull().unique())
     .addColumn('public_key', 'varchar', col => col.notNull().unique())
     .addColumn('sign_count', 'integer', col => col.defaultTo(0))
-    .addColumn('created_at', 'timestamp', col => col.defaultTo(new Date()))
-    .addColumn('updated_at', 'timestamp', col => col.defaultTo(new Date()))
+    .addColumn('created_at', 'timestamp', col => col.defaultTo(sql`now()`))
+    .addColumn('updated_at', 'timestamp', col => col.defaultTo(sql`now()`))
     .addColumn('user_id', 'integer', 
       col => col.references('user.id').onDelete('cascade')
     )
