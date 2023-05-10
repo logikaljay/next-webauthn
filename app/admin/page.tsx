@@ -22,11 +22,6 @@ export default async function AdminPage() {
 
   const credentials = await users.getAllCredentialsForUserId(user.id)
 
-  async function signOut() {
-    "use server"
-    await storage.destroy()
-  }
-
   async function togglePasskey(value: boolean) {
     "use server"
     await users.updateSettings(user.id, {
@@ -73,7 +68,7 @@ export default async function AdminPage() {
 
       <div className="flex space-x-3">
         <ChangePassword force={settings.should_change_password} />
-        <SignOutButton signOut={signOut} />
+        <SignOutButton />
       </div>
     </div>
   )

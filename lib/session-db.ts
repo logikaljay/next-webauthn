@@ -41,7 +41,7 @@ const storage = {
       .where('key', '=', sessionKey)
       .select(['data'])
       .executeTakeFirst()
-    return value.data[key as string] as T[K]
+    return value?.data[key as string] as T[K]
   },
 
   async getAll<T extends Session>() {
@@ -74,6 +74,7 @@ const storage = {
     let sessionKey = getSessionKey()
     await db.deleteFrom('session')
       .where('key', '=', sessionKey)
+      .execute()
   }
 }
 
